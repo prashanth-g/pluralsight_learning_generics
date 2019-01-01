@@ -3,6 +3,7 @@ package com.prashanth.pluralsight.learning.generics;
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class Injector {
     private Map<Class<?>, Object> objectGraph = new HashMap<>();
@@ -18,8 +19,17 @@ public class Injector {
 
     private Object instantiate(Class<?> type) {
         try {
-            return type.getDeclaredConstructors()[0]
-                    .newInstance(this.objectGraph.get(String.class));
+
+            Constructor<?>[] constructors = type.getConstructors();
+            if(constructors.length != 1) {
+                throw new IllegalArgumentException(type+" must have atleast one constructor");
+            }
+            Constructor<?> constructor = constructors[0];
+            Object[] args = Stream.of(constructor.getParameterTypes())
+                    .map(param -> (Object) newInstance(param))
+                    .toArray();
+
+            return constructor.newInstance(args);
         } catch (Exception e) {
             e.printStackTrace();
         }
