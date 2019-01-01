@@ -5,6 +5,7 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class ReifiableExamples {
@@ -17,6 +18,7 @@ public class ReifiableExamples {
 
         final ParameterizedType genericSuperclass = (ParameterizedType) StringList.class.getGenericSuperclass();
         System.out.println(Arrays.toString(genericSuperclass.getActualTypeArguments()));
+
     }
 
     public static class StringList extends ArrayList<String> {
